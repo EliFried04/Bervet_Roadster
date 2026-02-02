@@ -1,7 +1,7 @@
 import roadster as rsd
 import matplotlib.pyplot as plt
 import numpy as np
-#from scipy.integrate import quad
+
 
 distance_anna, speed_anna = rsd.load_route('speed_anna.npz')
 distance_elsa, speed_elsa = rsd.load_route('speed_elsa.npz')
@@ -17,6 +17,10 @@ I_refa = rsd.time_to_destination(x,'speed_anna.npz',100000)
 
 
 I_refe = rsd.time_to_destination(y,'speed_elsa.npz',100000)
+
+print(f'Tid för Elsa att köra sin rutt: {60* I_refe} minuter, tid för Anna att kköra sin rutt: {I_refa * 60} minuter')
+
+
 
 n= 2
 värden_a= np.array([])
@@ -38,6 +42,7 @@ for i in range(11):
     värden_e=np.append(värden_e,[I_diffe]) 
     steg_e = np.append(steg_e,[n])
     n=2*n
+
 
 
 
