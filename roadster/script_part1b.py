@@ -3,67 +3,75 @@ import matplotlib.pyplot as plt
 import roadster
 
 
-# === Filnamn för rutterna ===
+#rutter
 route_anna = 'speed_anna.npz'
 route_elsa = 'speed_elsa.npz'
 
-plt.figure()
-
-# =======================
-# ===== ANNA ============
-# =======================
-
+#Anna
 # Läs in Annas ruttdata
 dist_a, speed_a = roadster.load_route('speed_anna.npz')
 
-# Punktdiagram av mätdata (diskreta datapunkter)
-plt.plot(dist_a, speed_a, 'o', label='Anna – mätdata')
-
-# Skapa många punkter längs rutten för interpolation
+#längs rutten för interpolation
 x_anna = np.linspace(dist_a[0], dist_a[-1], 1500)
 
-# Interpolerad hastighet längs rutten
+# Interpolerad hastighet
 v_anna = roadster.velocity(x_anna, route_anna)
 
 # Plotta interpolerad funktion
-plt.plot(x_anna, v_anna, '-', label='Anna – interpolerad hastighet')
+plt.figure(1)
+plt.plot(x_anna, v_anna, label="Interpolerad funktion")
+plt.xlabel('Sträcka [Km]')
+plt.ylabel('Hastighet [Km/h]')
+plt.title('Interpolerad hastighet längs Annas rutt')
+plt.grid(True)
 
-# =======================
-# ===== ELSA ============
-# =======================
+# Punktdiagram anna
+
+plt.scatter(dist_a, speed_a, c='black', s=8, label="Datapunkter")
+plt.xlabel('Sträcka [Km]')
+plt.ylabel('Hastighet [Km/h]')
+plt.title('Annas hastighet')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+# Elsa
 
 # Läs in Elsas ruttdata
 dist_e, speed_e = roadster.load_route('speed_elsa.npz')
-
-# Punktdiagram av mätdata (diskreta datapunkter)
-plt.plot(dist_e, speed_e, 's', label='Elsa – mätdata')
-
 # Skapa många punkter längs rutten för interpolation
 x_e = np.linspace(dist_e[0], dist_e[-1], 1500)
 
-# Interpolerad hastighet längs rutten
+# Interpolerad hastighet
 v_e = roadster.velocity(x_e, route_elsa)
 
 # Plotta interpolerad funktion
-plt.plot(x_e, v_e, '--', label='Elsa – interpolerad hastighet')
+plt.figure(2)
+plt.plot(x_e, v_e, label="Interpolerad funktion")
+plt.xlabel('Sträcka [Km])')
+plt.ylabel('Hastighet [Km/h]')
+plt.title('Interpolerad hastighet längs Elsas rutt')
+plt.grid(True)
 
-# === Plot-inställningar ===
-plt.xlabel('Tillryggalagd sträcka (km)')
-plt.ylabel('Hastighet (km/h)')
-plt.title('Hastighet längs rutterna (Anna och Elsa)')
+
+# Punktdiagram elsa
+
+
+plt.scatter(dist_e, speed_e, c='black', s=8,label="Datapunkter" )
+plt.xlabel('Sträcka [Km]')
+plt.ylabel('Hastighet [Km/h]')
+plt.title('Elsas hastighet')
 plt.grid(True)
 plt.legend()
-
 plt.show()
 
-x_total_anna = dist_a[-1]
-a = roadster.time_to_destination(x_total_anna, route_anna, 1000)
 
-#print(a, "timmar")
-#print(a*60, "minuter")
+speed_kmph = np.linspace(1., 200., 1000)
+consumption_Whpkm = roadster.consumption(speed_kmph)
 
-#x_total_elsa = dist_e[-1]
-#b = roadster.time_to_destination(x_total_elsa, route_elsa, 1000)
-#
-#print(b, "timmar")
-#print(b*60, "minuter")
+plt.figure()
+plt.plot(speed_kmph, consumption_Whpkm, c='black')
+plt.xlabel('Hastighet [Km/h]')
+plt.ylabel('Konsumtion [Wh/Km]')
+plt.title('Energiförbrukning')
+plt.grid(True)
