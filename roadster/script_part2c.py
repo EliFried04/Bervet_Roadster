@@ -2,7 +2,6 @@ import numpy as np
 import roadster as rsd
 import matplotlib.pyplot as plt
 
-# 1. Förberedelser
 anna_dist, _ = rsd.load_route('speed_anna.npz')
 elsa_dist, _ = rsd.load_route('speed_elsa.npz')
 
@@ -10,18 +9,18 @@ x = anna_dist[-1]  # Slutpunkt Anna
 y = elsa_dist[-1]  # Slutpunkt Elsa
 
 # Beräkna referensvärden (I_ref) med ett mycket högt n för att kunna räkna ut felet
-n_ref = 2**18
+n_ref = 10000000
 I_refa = rsd.time_to_destination(x, 'speed_anna.npz', n_ref)
 I_refe = rsd.time_to_destination(y, 'speed_elsa.npz', n_ref)
 
-# loopar för att få felvärdena
+# arrays för att få felvärdena
 n = 2
 värden_a = np.array([])
 steg_a = np.array([])
 värden_e = np.array([])
 steg_e = np.array([])
 
-for i in range(13): #Fler steg ger fler beräkningar men även tydligare att se konvergens
+for i in range(25): #Fler steg ger fler beräkningar men även tydligare att se konvergens
     # Anna
     t_anna = rsd.time_to_destination(x, 'speed_anna.npz', n)
     I_diffa = abs(I_refa - t_anna)
@@ -53,8 +52,8 @@ C_a1 = värden_a[0] * (steg_a[0]**p1)
 plt.loglog(steg_a, C_a1 / (steg_a**p1), 'k:', alpha=0.5, label='Teoretisk O(1/n¹)')
 
 plt.xlabel('Antal delintervall n')
-plt.ylabel('Absolut fel |I_ref - I_approx|')
-plt.title('Log-log plot av integrationsfel och noggrannhetsordning')
+plt.ylabel('Absolut fel')
+plt.title('Integrationsfel och noggrannhetsordning')
 plt.legend()
 plt.grid(True, which="both", ls="-", alpha=0.3)
 plt.show()
