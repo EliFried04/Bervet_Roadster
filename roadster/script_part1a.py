@@ -18,13 +18,11 @@ distance_elsa, speed_elsa = load_route('speed_elsa.npz')
 speed_kmph = np.linspace(1., 200., 1000)
 consumption_Whpkm = roadster.consumption(speed_kmph)
 
-#Konsumtion mot hastighet
+# Linjediagram Consumption vs Speed
 plt.figure()
-plt.plot(Hastighet [Km/h], Konsumtion [Wh/Km, c='black', s=5)
+plt.plot(speed_kmph, consumption_Whpkm, color='black') 
 plt.xlabel('Hastighet [Km/h]')
 plt.ylabel('Consumption [Wh/Km]')
 plt.title('Consumptions Diagram')
 plt.grid(True)
 plt.show()
-
-
