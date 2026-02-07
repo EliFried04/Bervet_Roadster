@@ -10,14 +10,14 @@ y_total_e = distance_elsa[-1]
 
 # ref
 
-n_ref = 100000
+n_ref = 1000000
 E_refa = rsd.total_consumption(x_total_a, 'speed_anna.npz', n_ref)
 E_refe = rsd.total_consumption(y_total_e, 'speed_elsa.npz', n_ref)
 
 print(f'Total konsumtion för Anna: {E_refa:.2f} Wh')
 print(f'Total konsumtion för Elsa: {E_refe:.2f} Wh')
 
-# 3. Konvergensanalys för energikonsumtion
+# konvanalys e 
 n = 2
 värden_a = np.array([])
 steg_a = np.array([])
@@ -25,7 +25,7 @@ värden_e = np.array([])
 steg_e = np.array([])
 
 
-for i in range(13):
+for i in range(20):
     # Anna fel mot ref
     e_anna = rsd.total_consumption(x_total_a, 'speed_anna.npz', n)
     E_diffa = abs(E_refa - e_anna)
@@ -40,15 +40,15 @@ for i in range(13):
     
     n = 2 * n
 
-
+# figur plot + setup 
 plt.figure(figsize=(10, 6))
-plt.loglog(steg_a, värden_a, 'o-', label='Anna (Energi)')
-plt.loglog(steg_e, värden_e, 's-', label='Elsa (Energi)')
-grans_wh = 0.1
+plt.loglog(steg_a, värden_a, label='Anna (Energi)')
+plt.loglog(steg_e, värden_e, label='Elsa (Energi)')
+grans_wh = 0.5
 plt.axhline(y=grans_wh, color='r', linestyle='--', label=f'Gräns: {grans_wh} Wh')
 plt.xlabel('Antal delintervall (n)')
-plt.ylabel('Absolut fel i konsumtion [Wh]')
-plt.title('Konvergensanalys: Energikonsumtion (Trapetsmetoden)')
+plt.ylabel('Konsumtionsskillnad [Wh]')
+plt.title('Undersökning delintervall: Energi')
 plt.grid(True, which="both", ls="-", alpha=0.5)
 plt.legend()
 plt.show()
