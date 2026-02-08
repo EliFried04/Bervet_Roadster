@@ -2,6 +2,7 @@ import numpy as np
 from scipy import interpolate
 import matplotlib.pyplot as plt
 
+
 def load_route(route):
     """ 
     Get speed data from route .npz-file. Example usage:
@@ -36,8 +37,6 @@ def consumption(v):
     v = np.asarray(v)
     return 546.8/v + 50.31 + 0.2584*v + 0.008210*v**2
 
-speed_kmph = np.linspace(1., 200., 1000)
-consumption_Whpkm = consumption(speed_kmph)
 
 ### PART 1B ###
 def velocity(x, route):
@@ -79,9 +78,45 @@ def total_consumption(x, route, n):
 
 
 ### PART 3A ###
-def distance(T, route): 
-    # REMOVE THE FOLLOWING LINE AND WRITE YOUR SOLUTION
-    raise NotImplementedError('distance not implemented yet!')
+def distance(T, route):
+    """
+    Hitta sträcka x där time_to_destination(x) = T.
+    Ren Newton-Raphson utan fallback.
+    """
+    import numpy as np
+
+    n = 10000000
+    distance_array, speed_array = load_route(route)
+    X_total = distance_array[-1]
+
+    # Startgissning med medelhastighet
+    v_mean = np.mean(speed_array)
+    x = v_mean * T
+    x = max(0, min(X_total, x))  # håll inom intervallet
+    
+    tol = 1e-6
+    max_iter = 1000
+    n_iter = 0
+
+    while n_iter < max_iter:
+        n_iter += 1
+
+        # F(x) = T(x) - T
+        f = time_to_destination(x, route, n) - T
+        if abs(f) < tol:  # konvergens
+            return x
+
+        v = velocity(x, route)
+
+        # Newton-steg
+        dx = -f * v
+        x_new = x + dx
+        x = x_new
+
+    # Om vi nått max iterationer utan konvergens
+    raise RuntimeError("Newton-Raphson konvergerade inte")
+
+
 
 ### PART 3B ###
 def reach(C, route):
