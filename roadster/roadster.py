@@ -79,6 +79,11 @@ def total_consumption(x, route, n):
 
 ### PART 3A ###
 def distance(T, route):
+    """
+    Hitta sträcka x där time_to_destination(x) = T.
+    Ren Newton-Raphson utan fallback.
+    """
+
     n = 10000000
     distance_array, speed_array = load_route(route)
     X_total = distance_array[-1]
@@ -87,7 +92,7 @@ def distance(T, route):
     v_mean = np.mean(speed_array)
     x = v_mean * T
     x = max(0, min(X_total, x))  # håll inom intervallet
-    
+
     tol = 1e-6
     max_iter = 1000
     n_iter = 0
@@ -103,16 +108,42 @@ def distance(T, route):
         v = velocity(x, route)
 
         # Newton-steg
-        dx = -f * v
+        dx = -f * v  
         x_new = x + dx
         x = x_new
 
     # Om vi nått max iterationer utan konvergens
     raise RuntimeError("Newton-Raphson konvergerade inte")
 
-
-
 ### PART 3B ###
 def reach(C, route):
-    # REMOVE THE FOLLOWING LINE AND WRITE YOUR SOLUTION
-    raise NotImplementedError('reach not implemented yet!')
+    n = 1000000
+    distance_array, speed_array = load_route(route)
+    x_total = distance_array[-1]
+
+    # Om batteriet räcker hela vägen
+    if total_consumption(x_total, route, n) <= C:
+        return x_total
+
+    # Startgissning: konstant medelhastighet
+    v_mean = np.mean(speed_array)
+    x = C / consumption(v_mean)
+    x = min(x, x_total)
+
+    tol = 1e-5
+    max_iter = 50
+
+    for _ in range(max_iter):
+        f = total_consumption(x, route, n) - C
+        if abs(f) < tol:
+            return x
+
+        df = consumption(velocity(x, route))
+        x = x - f / df
+
+        # Säkerhetsklipp
+        x = max(0, min(x, x_total))
+
+    raise RuntimeError("Newton-Raphson konvergerade inte")
+
+
