@@ -79,12 +79,6 @@ def total_consumption(x, route, n):
 
 ### PART 3A ###
 def distance(T, route):
-    """
-    Hitta sträcka x där time_to_destination(x) = T.
-    Ren Newton-Raphson utan fallback.
-    """
-    import numpy as np
-
     n = 10000000
     distance_array, speed_array = load_route(route)
     X_total = distance_array[-1]
