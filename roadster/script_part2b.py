@@ -1,0 +1,54 @@
+import roadster as rsd
+import matplotlib.pyplot as plt
+import numpy as np
+
+distance_anna, _ = rsd.load_route('speed_anna.npz')
+distance_elsa, _ = rsd.load_route('speed_elsa.npz')
+
+x_total_a = distance_anna[-1]
+y_total_e = distance_elsa[-1]
+
+# ref
+
+n_ref = 1000000
+E_refa = rsd.total_consumption(x_total_a, 'speed_anna.npz', n_ref)
+E_refe = rsd.total_consumption(y_total_e, 'speed_elsa.npz', n_ref)
+
+print(f'Total konsumtion för Anna: {E_refa:.2f} Wh')
+print(f'Total konsumtion för Elsa: {E_refe:.2f} Wh')
+
+# konvanalys e 
+n = 2
+värden_a = np.array([])
+steg_a = np.array([])
+värden_e = np.array([])
+steg_e = np.array([])
+
+
+for i in range(20):
+    # Anna fel mot ref
+    e_anna = rsd.total_consumption(x_total_a, 'speed_anna.npz', n)
+    E_diffa = abs(E_refa - e_anna)
+    värden_a = np.append(värden_a, [E_diffa]) 
+    steg_a = np.append(steg_a, [n])
+    
+    # Elsa felmot ref
+    e_elsa = rsd.total_consumption(y_total_e, 'speed_elsa.npz', n)
+    E_diffe = abs(E_refe - e_elsa)
+    värden_e = np.append(värden_e, [E_diffe]) 
+    steg_e = np.append(steg_e, [n])
+    
+    n = 2 * n
+
+# figur plot + setup 
+plt.figure(figsize=(10, 6))
+plt.loglog(steg_a, värden_a, label='Anna (Energi)')
+plt.loglog(steg_e, värden_e, label='Elsa (Energi)')
+grans_wh = 0.5
+plt.axhline(y=grans_wh, color='r', linestyle='--', label=f'Gräns: {grans_wh} Wh')
+plt.xlabel('Antal delintervall (n)')
+plt.ylabel('Konsumtionsskillnad [Wh]')
+plt.title('Undersökning delintervall: Energi')
+plt.grid(True, which="both", ls="-", alpha=0.5)
+plt.legend()
+plt.show()

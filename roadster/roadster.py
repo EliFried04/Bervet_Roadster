@@ -124,7 +124,7 @@ def reach(C, route):
     # Om batteriet räcker hela vägen
     if total_consumption(x_total, route, n) <= C:
         return x_total
-
+    
     # Startgissning: konstant medelhastighet
     v_mean = np.mean(speed_array)
     x = C / consumption(v_mean)

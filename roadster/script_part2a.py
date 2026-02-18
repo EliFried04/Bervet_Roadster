@@ -1,13 +1,16 @@
 import roadster as rsd
 import matplotlib.pyplot as plt
 import numpy as np
-
+#from scipy.integrate import quad
 
 distance_anna, speed_anna = rsd.load_route('speed_anna.npz')
 distance_elsa, speed_elsa = rsd.load_route('speed_elsa.npz')
 
 x=distance_anna[-1]
 y=distance_elsa[-1]
+#t_anna=rsd.time_to_destination(x,'speed_anna.npz',n)
+#t_elsa=rsd.time_to_destination(y,'speed_elsa.npz',n)
+
 
 # referenser, högt n bra
 I_refa = rsd.time_to_destination(x,'speed_anna.npz',1000000)
@@ -20,7 +23,7 @@ print(f'Tid för Elsa att köra sin rutt: {60* I_refe} minuter, tid för Anna at
 
 
 # setup för for loopen, startvärde på n = 2, 
-
+# skulle väl kunna vara högre med tanke på hur grafen för v ser ut
 n= 2
 värden_a= np.array([])
 steg_a = np.array([])

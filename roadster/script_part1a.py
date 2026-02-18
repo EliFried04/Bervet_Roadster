@@ -23,6 +23,26 @@ plt.figure()
 plt.plot(speed_kmph, consumption_Whpkm, color='black') 
 plt.xlabel('Hastighet [Km/h]')
 plt.ylabel('Konsumtion [Wh/Km]')
-plt.title('Energiförbrukning')
+plt.title('Energikonsumtion')
 plt.grid(True)
 plt.show()
+
+'''
+# Punktdiagram ANNA
+plt.figure()
+plt.scatter(distance_anna, speed_anna, c='black', s=5)
+plt.xlabel('Tillryggalagd sträcka [Km]')
+plt.ylabel('Hastighet [Km/h]')
+plt.title('Annas hastighet')
+plt.grid(True)
+plt.show()
+
+# Punktdiagram ELSA
+plt.figure()
+plt.scatter(distance_elsa, speed_elsa, c='black', s=5)
+plt.xlabel('Tillryggalagd sträcka [Km]')
+plt.ylabel('Hastighet [Km/h]')
+plt.title('Elsas hastighet')
+plt.grid(True)
+plt.show()
+'''

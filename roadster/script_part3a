@@ -1,0 +1,12 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import roadster as rsd
+
+
+#hur kpngt kommer anna ocg elsa
+# efter 30min??
+routes = ['speed_anna.npz', 'speed_elsa.npz']
+
+
+for i in routes: 
+    print ({rsd.distance(0.5, i)})

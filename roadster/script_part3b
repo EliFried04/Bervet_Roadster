@@ -1,0 +1,14 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import roadster as rsd
+
+#Hur långt kommer Anna och Elsa
+# om = 10 000 Wh?
+
+
+routes = ['speed_anna.npz', 'speed_elsa.npz']
+
+C= 10000
+for i in routes: 
+    print (rsd.reach(C,i))
+    

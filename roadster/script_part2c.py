@@ -2,7 +2,8 @@ import numpy as np
 import roadster as rsd
 import matplotlib.pyplot as plt
 
-anna_dist, _ = rsd.load_route('speed_anna.npz')
+# 1. Förberedelser
+anna_dist, _ = rsd.load_route('speed_anna')
 elsa_dist, _ = rsd.load_route('speed_elsa.npz')
 
 x = anna_dist[-1]  # Slutpunkt Anna
