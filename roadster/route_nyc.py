@@ -26,6 +26,71 @@ def route_nyc(t,x):
     return pchip_2d(data_t,data_x,nyc_velocity,t,x)-10
 
 ### PART 4A ###
-def nyc_route_traveler_euler(t0,h):
-    # REMOVE THE FOLLOWING LINE AND WRITE YOUR SOLUTION
+def nyc_route_traveler_euler(t0, h):
+    """
+    Simulerar en resa längs rutten med Eulers metod.
+    Startar vid tid t0 och position x=0 och avslutas när x=60 km.
+
+    Returnerar:
+      time_h     : array med tider (h)
+      distance_km: array med positioner (km)
+      speed_kmph : array med hastigheter (km/h)
+    """
+    t = float(t0)
+    x = 0.0
+
+    time_list = [float(t)]
+    dist_list = [float(x)]
+
+    # Hjälpfunktion: säkerställ att route_nyc ger ett ENKELT skalärt värde
+    def _scalar_speed(tt, xx):
+        v_raw = route_nyc(tt, xx)
+        arr = np.asarray(v_raw)
+        if arr.size != 1:
+            raise ValueError(f"route_nyc returned non-scalar speed (shape {arr.shape}) for t={tt}, x={xx}")
+        return float(arr.item())
+
+    # initiera med en skalär
+    speed_list = [_scalar_speed(t, x)]
+
+    # huvudloop
+    while x < 60.0:
+        v = _scalar_speed(t, x)   # km/h (float)
+
+        if v <= 0:
+            # defensiv hantering: om hastigheten blir 0 eller negativ,
+            # avsluta för att undvika oändlig loop / division med noll.
+            # Detta borde normalt inte hända med given modell.
+            # Vi lägger till sista punkt och bryter.
+            time_list.append(float(t))
+            dist_list.append(float(x))
+            speed_list.append(float(v))
+            break
+
+        # föreslaget Eulersteg
+        x_new = x + h * v
+        t_new = t + h
+
+        # Om vi går förbi 60 km → justera sista steget så att x_new == 60
+        if x_new > 60.0:
+            h_last = (60.0 - x) / v
+            t_new = t + h_last
+            x_new = 60.0
+
+            time_list.append(float(t_new))
+            dist_list.append(float(x_new))
+            speed_list.append(_scalar_speed(t_new, x_new))
+            break
+
+        # normalt steg: spara skalära värden
+        time_list.append(float(t_new))
+        dist_list.append(float(x_new))
+        speed_list.append(_scalar_speed(t_new, x_new))
+
+        # uppdatera för nästa steg
+        t = t_new
+        x = x_new
+
+    return np.array(time_list, dtype=float), np.array(dist_list, dtype=float), np.array(speed_list, dtype=float)
+
     raise NotImplementedError('nyc_route_traveler_euler not implemented yet!')
