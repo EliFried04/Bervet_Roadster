@@ -22,30 +22,22 @@ plt.savefig("speed-data-nyc.eps", bbox_inches='tight')
 
 
 ax = plt.gca() 
-
-# 2. Simulera data (samma som förut)
+#euler
 h_step = 1.0 / 60.0
 t04, x04, v04 = route_nyc.route_nyc_traveler_euler (4.0, h_step)
 t09, x09, v09 = route_nyc.route_nyc_traveler_euler (9.5, h_step)
 
-# 3. Plotta direkt på de hämtade axlarna
-# Vi sätter zorder högt för att vara säkra på att de hamnar ovanpå färgfältet
+
 ax.plot(t04, x04, linewidth=2.2, color='black', label='Start 04:00', zorder=10)
 ax.plot(t09, x09, linewidth=2.2, color='green', label='Start 09:30', zorder=10)
-
-# Markera start och mål
 ax.scatter([t04[0]], [x04[0]], color='black', edgecolor='k', zorder=11)
 ax.scatter([t09[0]], [x09[0]], color='green', edgecolor='k', zorder=11)
 ax.scatter([t04[-1]], [60], color='black', edgecolor='k', zorder=11)
 ax.scatter([t09[-1]], [60], color='green', edgecolor='k', zorder=11)
-
-# 4. Uppdatera legend (valfritt, men hjälper tydligheten)
 ax.legend(loc='upper right', fontsize=10)
-
-# 5. Spara igen (nu med linjerna inkluderade)
 plt.savefig("speed-data-nyc_with_routes.eps", bbox_inches='tight')
 
-# Visa resultat
+#plot
 plt.show()
 
 arrival04 = t04[-1]
