@@ -12,56 +12,43 @@ tt_fine, xx_fine = np.meshgrid(t_fine, x_fine)
 zz_fine = route_nyc.route_nyc(tt_fine,xx_fine)
 w, h = plt.figaspect(0.4)
 fig = plt.figure(figsize=(w, h))
-
-# skapa ax
-ax = plt.axes()
-ax.set_aspect(0.2, adjustable='box')
-
-cs = ax.contourf(tt_fine, xx_fine, zz_fine, 50, cmap=cm.get_cmap('jet'))
-plt.xlabel('Time [hour of day]',fontsize=18)
-plt.ylabel('Distance [km]',fontsize=18)
-plt.title('Speed [km/h]',fontsize=18)
-fig.colorbar(cs)
+plt.axes().set_aspect(0.2, adjustable='box')
+cs = plt.contourf(tt_fine,xx_fine,zz_fine, 50, cmap=cm.get_cmap('jet'))
+plt.xlabel('Tid på dagen [h]', fontsize=18)
+plt.ylabel('Distans [km]', fontsize=18)
+fig.colorbar(cs, label='Hastighet [km/h]')  
+plt.savefig("speed-data-nyc.eps", bbox_inches='tight')
 
 
-# tidssteg i timmar 
+
+ax = plt.gca() 
+
+# 2. Simulera data (samma som förut)
 h_step = 1.0 / 60.0
+t04, x04, v04 = route_nyc.route_nyc_traveler_euler (4.0, h_step)
+t09, x09, v09 = route_nyc.route_nyc_traveler_euler (9.5, h_step)
 
-# euler
-t04, x04, v04 = route_nyc.nyc_route_traveler_euler(4.0, h_step)
-t09, x09, v09 = route_nyc.nyc_route_traveler_euler(9.5, h_step)
+# 3. Plotta direkt på de hämtade axlarna
+# Vi sätter zorder högt för att vara säkra på att de hamnar ovanpå färgfältet
+ax.plot(t04, x04, linewidth=2.2, color='black', label='Start 04:00', zorder=10)
+ax.plot(t09, x09, linewidth=2.2, color='green', label='Start 09:30', zorder=10)
 
-# plot
-ax.plot(t04, x04, linewidth=2.2, color='white', label='Start 04:00')
-ax.plot(t09, x09, linewidth=2.2, color='red', label='Start 09:30')
+# Markera start och mål
+ax.scatter([t04[0]], [x04[0]], color='black', edgecolor='k', zorder=11)
+ax.scatter([t09[0]], [x09[0]], color='green', edgecolor='k', zorder=11)
+ax.scatter([t04[-1]], [60], color='black', edgecolor='k', zorder=11)
+ax.scatter([t09[-1]], [60], color='green', edgecolor='k', zorder=11)
 
-
-ax.scatter([t04[0]], [x04[0]], color='white', edgecolor='k', zorder=5)
-ax.scatter([t09[0]], [x09[0]], color='red', edgecolor='k', zorder=5)
-ax.scatter([t04[-1]], [60], color='white', edgecolor='k', zorder=5)
-ax.scatter([t09[-1]], [60], color='red', edgecolor='k', zorder=5)
-
+# 4. Uppdatera legend (valfritt, men hjälper tydligheten)
 ax.legend(loc='upper right', fontsize=10)
-ax.set_xlim(0, 24)
-ax.set_ylim(0, 60)
+
+# 5. Spara igen (nu med linjerna inkluderade)
+plt.savefig("speed-data-nyc_with_routes.eps", bbox_inches='tight')
+
+# Visa resultat
+plt.show()
 
 arrival04 = t04[-1]
-travel04 = arrival04 - 4.0
 arrival09 = t09[-1]
-travel09 = arrival09 - 9.5
-
-def hours_to_hm(h):
-    hh = int(np.floor(h)) % 24
-    mm = int(round((h - np.floor(h)) * 60))
-    if mm == 60:
-        hh = (hh + 1) % 24
-        mm = 0
-    return f"{hh:02d}:{mm:02d}"
-
-print("=== Route traveler results ===")
-print(f"Start 04:00  -> ankomsttid (decimal h): {arrival04:.6f}  restid: {travel04:.6f} h  ({hours_to_hm(arrival04)})")
-print(f"Start 09:30  -> ankomsttid (decimal h): {arrival09:.6f}  restid: {travel09:.6f} h  ({hours_to_hm(arrival09)})")
-
-# Spara och visa
-plt.savefig("speed-data-nyc.eps", bbox_inches='tight')
-plt.show()
+print(f"Ankomst 04:00: {arrival04:.2f}")
+print(f"Ankomst 09:30: {arrival09:.2f}")
