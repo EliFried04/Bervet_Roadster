@@ -13,7 +13,7 @@ zz_fine = route_nyc.route_nyc(tt_fine,xx_fine)
 w, h = plt.figaspect(0.4)
 fig = plt.figure(figsize=(w, h))
 
-# skapa ax lika som i mallen (samma effekt som plt.axes().set_aspect(...))
+# skapa ax
 ax = plt.axes()
 ax.set_aspect(0.2, adjustable='box')
 
@@ -31,7 +31,7 @@ h_step = 1.0 / 60.0
 t04, x04, v04 = route_nyc.nyc_route_traveler_euler(4.0, h_step)
 t09, x09, v09 = route_nyc.nyc_route_traveler_euler(9.5, h_step)
 
-# plott
+# plot
 ax.plot(t04, x04, linewidth=2.2, color='white', label='Start 04:00')
 ax.plot(t09, x09, linewidth=2.2, color='red', label='Start 09:30')
 
@@ -62,8 +62,6 @@ print("=== Route traveler results ===")
 print(f"Start 04:00  -> ankomsttid (decimal h): {arrival04:.6f}  restid: {travel04:.6f} h  ({hours_to_hm(arrival04)})")
 print(f"Start 09:30  -> ankomsttid (decimal h): {arrival09:.6f}  restid: {travel09:.6f} h  ({hours_to_hm(arrival09)})")
 
-# Spara precis som i din mall
+# Spara och visa
 plt.savefig("speed-data-nyc.eps", bbox_inches='tight')
-
-# visa figuren (behålls interaktivt om du kör lokalt)
 plt.show()
