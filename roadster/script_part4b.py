@@ -23,21 +23,19 @@ plt.ylabel('Distance [km]',fontsize=18)
 plt.title('Speed [km/h]',fontsize=18)
 fig.colorbar(cs)
 
-# ----------------------
-# Lägg till: simulera och plotta två rutter med nyc_route_traveler_euler
-# ----------------------
-# tidssteg i timmar (1 minut)
+
+# tidssteg i timmar 
 h_step = 1.0 / 60.0
 
-# Euler-simuleringarna (använder funktionen i route_nyc)
+# euler
 t04, x04, v04 = route_nyc.nyc_route_traveler_euler(4.0, h_step)
 t09, x09, v09 = route_nyc.nyc_route_traveler_euler(9.5, h_step)
 
-# plotta kurvorna ovanpå konturen (så att de syns bra mot färgfältet)
+# plott
 ax.plot(t04, x04, linewidth=2.2, color='white', label='Start 04:00')
 ax.plot(t09, x09, linewidth=2.2, color='red', label='Start 09:30')
 
-# markera start- och målpositioner
+
 ax.scatter([t04[0]], [x04[0]], color='white', edgecolor='k', zorder=5)
 ax.scatter([t09[0]], [x09[0]], color='red', edgecolor='k', zorder=5)
 ax.scatter([t04[-1]], [60], color='white', edgecolor='k', zorder=5)
@@ -47,7 +45,6 @@ ax.legend(loc='upper right', fontsize=10)
 ax.set_xlim(0, 24)
 ax.set_ylim(0, 60)
 
-# skriv ut ankomsttider i terminalen (decimal-timmar)
 arrival04 = t04[-1]
 travel04 = arrival04 - 4.0
 arrival09 = t09[-1]
