@@ -1,5 +1,5 @@
 import numpy as np
-#import pytest
+import pytest
 import roadster
 import route_nyc
 import os
